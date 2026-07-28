@@ -487,7 +487,6 @@ function initElements() {
     sharePanelLead: document.getElementById("sharePanelLead"),
     sharePanelHint: document.getElementById("sharePanelHint"),
     publicLinkText: document.getElementById("publicLinkText"),
-    publicQr: document.getElementById("publicQr"),
     copyPublicLinkBtn: document.getElementById("copyPublicLinkBtn"),
     nativePublicShareBtn: document.getElementById("nativePublicShareBtn"),
     generatePosterBtn: document.getElementById("generatePosterBtn"),
@@ -1167,14 +1166,9 @@ function publicShareUrl() {
 }
 
 function updatePublicShare() {
-  if (!els.publicLinkText && !els.publicQr && !els.sharePanelHint) return;
+  if (!els.publicLinkText && !els.sharePanelHint) return;
   const url = publicShareUrl();
   if (els.publicLinkText) els.publicLinkText.textContent = url;
-  if (els.publicQr) {
-    els.publicQr.src =
-      "https://api.qrserver.com/v1/create-qr-code/?size=160x160&margin=8&data=" + encodeURIComponent(url);
-    els.publicQr.alt = ui("sharePanelTitle");
-  }
   if (els.sharePanelHint) {
     const host = window.location.hostname || "";
     const local = !host || host === "localhost" || host === "127.0.0.1";
