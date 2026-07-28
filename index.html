@@ -1,0 +1,342 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>精神状态速测台 · Mood Stage Quiz</title>
+  <meta name="description" content="1万+分类题库搞笑人格测试：恋爱/学习/职场/人生/动漫等可选，也可随机48题；选项与题目绑定，金句丰富；图鉴49+；微信/QQ 点开即可作答。" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="applicable-device" content="pc,mobile" />
+  <meta name="MobileOptimized" content="width" />
+  <meta name="HandheldFriendly" content="true" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta itemprop="name" content="精神状态速测台" />
+  <meta itemprop="description" content="2000+题库搞笑人格测试，微信/QQ 点开即可玩。" />
+  <meta property="og:title" content="精神状态速测台 · Mood Stage Quiz" />
+  <meta property="og:description" content="2000+题库 · 每次48题 · 图鉴49+ · 可投稿" />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-blob one" aria-hidden="true"></div>
+  <div class="bg-blob two" aria-hidden="true"></div>
+
+  <div class="app-shell">
+    
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">MS</div>
+        <div>
+          <strong id="brandTitle">精神状态速测台</strong>
+          <p id="brandSub">千题题库 · 每次随机48题 · 搞笑有哲理</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button type="button" class="pill" id="soundBtn">音效开</button>
+        <button type="button" class="pill" id="langBtn">English</button>
+        <button type="button" class="pill" id="aboutBtn">关于</button>
+        <button type="button" class="pill warn" id="restartTopBtn" hidden>重测</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="homeView" class="view active">
+        <div class="home-grid">
+          <div class="stage-card">
+            <div class="pill-row">
+              <span class="mini lime">HOT</span>
+              <span class="mini sky" id="bankChip">1万+</span>
+              <span class="mini coral">A/B/C/D</span>
+              <span class="mini violet">分类/随机</span>
+            </div>
+            <h1 id="homeTitle">选题库副本，抽取你的人格掉落</h1>
+            <p class="lead" id="homeLead">题库 10000+，覆盖恋爱/学习/职场/人生/搞笑/动漫/游戏等。可按分类测，也可全随机。每题四选项与情景绑定，金句又损又有哲理。</p>
+            <p class="bank-meta" id="bankMeta">题库加载中…</p>
+
+            <div class="category-panel">
+              <div class="section-row compact">
+                <div>
+                  <h2 id="categoryTitle" class="section-title tight">选择测试内容</h2>
+                  <p id="categoryLead" class="lead compact">点分类只抽该类题；点“随机混合”从全库均衡抽取。</p>
+                </div>
+                <p id="categoryPicked" class="bank-meta compact">已选：随机混合</p>
+              </div>
+              <div class="category-grid" id="categoryGrid" role="listbox" aria-label="categories"></div>
+            </div>
+
+            <div class="host-box">
+              <div class="host-avatar">📢</div>
+              <div>
+                <strong id="researcherLabel">场控小喇叭</strong>
+                <p id="researcherLine">我是小喇叭。今天不讲大道理，只负责把你的选项翻译成人话。</p>
+              </div>
+            </div>
+
+            <div class="action-row">
+              <button type="button" class="primary" id="startBtn">开始快问快答</button>
+              <button type="button" class="secondary" id="previewTypesBtn">先看增强图鉴</button>
+            </div>
+            <p class="fine" id="homeDisclaimer">娱乐向自我探索，不是专业心理评估。</p>
+
+                        <div class="share-panel" id="sharePanel">
+              <div class="share-copy">
+                <p class="kicker" id="sharePanelTitle">公开分享</p>
+                <p class="lead compact" id="sharePanelLead">把链接发到微信/QQ，任何人点开就能直接测完、看结果。</p>
+                <code id="publicLinkText" class="phone-link">加载公开链接中…</code>
+                <p class="hint" id="sharePanelHint">复制后直接发给好友，手机点开就能玩。</p>
+                <div class="action-row wrap">
+                  <button type="button" class="secondary" id="copyPublicLinkBtn">复制公开链接</button>
+                  <button type="button" class="secondary" id="nativePublicShareBtn">发给微信/QQ</button>
+                </div>
+              </div>
+              <div class="phone-qr-box">
+                <img id="publicQr" alt="Public access QR" width="148" height="148" />
+              </div>
+            </div>
+          </div>
+
+          <div class="side-stack">
+            <article class="metric m1">
+              <strong id="feature1Title">选项够损才真实</strong>
+              <p id="feature1Text">电梯社死、DDL神学、群聊政治、朋友圈人设，专治“我都差不多”。</p>
+            </article>
+            <article class="metric m2">
+              <strong id="feature2Title">结果能发朋友圈</strong>
+              <p id="feature2Text">认真分析 + 锐评 + 职业 + 匹配 + 1:1/9:16 海报。</p>
+            </article>
+            <article class="metric m3">
+              <strong id="feature3Title">中英一键切</strong>
+              <p id="feature3Text">想装国际友人就点右上角。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="nicknameView" class="view">
+        <div class="stage-card narrow">
+          <h2 id="nickTitle">给自己起个节目名</h2>
+          <p class="lead" id="nickLead">会出现在结果和海报上。不填就叫“匿名选手”。</p>
+          <form id="nicknameForm">
+            <label class="sr-only" for="nicknameInput">昵称</label>
+            <input id="nicknameInput" maxlength="20" autocomplete="nickname" placeholder="例如：已读不回仙人、DDL魔法师" />
+            <div class="action-row">
+              <button type="submit" class="primary" id="nickSubmitBtn">进入答题</button>
+              <button type="button" class="secondary" id="nickBackBtn">回首页</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section id="quizView" class="view">
+        <div class="stage-card quiz-card" id="quizCard">
+          <div class="quiz-head">
+            <div>
+              <div id="progressLabel" class="progress-text">第 1 / 48 题</div>
+              <div class="track"><div class="fill" id="progressFill"></div></div>
+            </div>
+            <div class="quiz-head-side">
+              <div id="progressPercent" class="pct">3%</div>
+              <div class="bank-meta compact" id="quizBankMeta"></div>
+            </div>
+          </div>
+          <div class="axis-row" id="axisChips"></div>
+          <p class="kicker" id="questionKicker"></p>
+          <h2 id="questionText"></h2>
+          <div class="quote-card" id="quoteCard">
+            <div class="quote-top">
+              <span class="quote-badge" id="quoteLabel">本场金句</span>
+              <span class="quote-spark" aria-hidden="true">✨</span>
+            </div>
+            <blockquote class="quote-line" id="questionQuote"></blockquote>
+          </div>
+          <div class="choice-grid" id="options"></div>
+          <div class="quiz-nav">
+            <button type="button" class="secondary" id="prevBtn">上一题</button>
+            <button type="button" class="pill" id="homeFromQuizBtn">回首页</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="resultView" class="view">
+        <div class="stage-card">
+          <div class="result-hero">
+            <div class="type-badge" id="typeBadge">ENFP</div>
+            <div>
+              <p class="kicker">Your Result</p>
+              <h2 id="typeTitle">ENFP · 火花冒险家</h2>
+              <p class="sub" id="typeTagline"></p>
+              <p class="summary" id="typeSummary"></p>
+            </div>
+          </div>
+
+          <div class="info-grid">
+            <article class="info coral">
+              <h3 id="analysisTitle">认真分析</h3>
+              <p id="analysisTip"></p>
+            </article>
+            <article class="info lime">
+              <h3 id="snarkTitle">人间锐评</h3>
+              <p id="snarkTip"></p>
+            </article>
+            <article class="info sky">
+              <h3 id="fantasyTitle">幻想职业</h3>
+              <p id="fantasyJob"></p>
+            </article>
+            <article class="info violet">
+              <h3 id="animalTitle">动物搭子</h3>
+              <p id="animalCompanion"></p>
+            </article>
+          </div>
+
+          <div class="info-grid profile-grid">
+            <article class="info sand">
+              <h3 id="traitsTitle">关键词</h3>
+              <div id="traitsList" class="chip-list"></div>
+            </article>
+            <article class="info minty">
+              <h3 id="strengthsTitle">优势雷达</h3>
+              <div id="strengthsList" class="chip-list"></div>
+            </article>
+            <article class="info soft">
+              <h3 id="watchoutsTitle">注意点</h3>
+              <div id="watchoutsList" class="chip-list"></div>
+            </article>
+            <article class="info sky">
+              <h3 id="growthTitle">成长建议</h3>
+              <p id="growthTip"></p>
+              <p class="slogan" id="sloganLine"></p>
+            </article>
+          </div>
+          <p class="hint" id="referenceNote"></p>
+
+          <div class="dim-grid" id="dimensionGrid"></div>
+
+          <h3 id="careersTitle" class="section-title">适合去哪搬砖</h3>
+          <div class="tile-grid" id="careersGrid"></div>
+
+          <div class="section-row">
+            <h3 id="matchesTitle" class="section-title">恋爱 / 社交匹配</h3>
+            <p id="matchHint" class="hint">最合拍 3 · 高摩擦 2</p>
+          </div>
+          <div class="tile-grid" id="matchesGrid"></div>
+
+          <div class="share-panel">
+            <textarea id="shareText" rows="5" readonly></textarea>
+            <div class="action-row wrap">
+              <button type="button" class="primary" id="copyShareBtn">复制分享文案</button>
+              <button type="button" class="secondary" id="nativeShareBtn">系统分享</button>
+              <button type="button" class="secondary" id="generatePosterBtn">生成海报</button>
+              <button type="button" class="pill" id="retryBtn">再来一次</button>
+            </div>
+            <p class="copy-feedback" id="copyFeedback" hidden>已复制</p>
+          </div>
+
+          <section class="contribute-panel" aria-label="contribute">
+            <h3 id="contributeTitle">给题库投稿一题</h3>
+            <p class="lead compact" id="contributeLead">答完也能贡献段子。题目会去重并自动进入用户题库。</p>
+            <form id="contributeForm" class="contribute-form">
+              <label>
+                <span data-i18n-axis>维度</span>
+                <select id="contributeAxis">
+                  <option value="EI">EI</option>
+                  <option value="SN">SN</option>
+                  <option value="TF">TF</option>
+                  <option value="JP">JP</option>
+                </select>
+              </label>
+              <label>
+                <span data-i18n-topic>分类</span>
+                <select id="contributeTopic"></select>
+              </label>
+              <label>
+                <span data-i18n-text>题干</span>
+                <textarea id="contributeText" rows="3" maxlength="240" required placeholder="例如：群红包来了，手速和人设同时崩，你会？"></textarea>
+              </label>
+              <label>
+                <span data-i18n-quote>金句</span>
+                <input id="contributeQuote" type="text" maxlength="120" placeholder="完成比完美更像成年人。" />
+              </label>
+              <div class="contribute-options">
+                <label>
+                  <span data-i18n-a>选项A</span>
+                  <input id="contributeOptA" type="text" maxlength="80" required />
+                </label>
+                <label>
+                  <span data-i18n-b>选项B</span>
+                  <input id="contributeOptB" type="text" maxlength="80" required />
+                </label>
+                <label>
+                  <span data-i18n-c>选项C</span>
+                  <input id="contributeOptC" type="text" maxlength="80" required />
+                </label>
+                <label>
+                  <span data-i18n-d>选项D</span>
+                  <input id="contributeOptD" type="text" maxlength="80" required />
+                </label>
+              </div>
+              <p class="hint" id="contributeHint">四选项需分别对应维度两端（如 EI 用 E/I）</p>
+              <button type="submit" class="primary" id="contributeSubmitBtn">提交到题库</button>
+              <p class="copy-feedback" id="contributeFeedback" hidden></p>
+            </form>
+          </section>
+        </div>
+      </section>
+
+      <section id="typesView" class="view">
+        <div class="stage-card">
+          <div class="section-row">
+            <div>
+              <h2 id="typesTitle">增强图鉴（49+）</h2>
+              <p id="typesLead" class="lead">16 型核心卡 + 扩展生活形态卡。气质、哲理、恋爱、工作、社交 buff/debuff、名场面、口头禅。</p>
+              <p class="bank-meta compact" id="typesCount">图鉴 50 张</p>
+            </div>
+            <button type="button" class="secondary" id="backHomeFromTypesBtn">回首页</button>
+          </div>
+          <div class="tile-grid types" id="typesGrid"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">Mood Stage Quiz · Fun only</footer>
+  </div>
+
+  <div class="modal" id="aboutModal" hidden>
+    <div class="modal-bg" data-close-modal></div>
+    <div class="modal-card" role="dialog" aria-modal="true">
+      <h3 id="aboutTitle">关于精神状态速测台</h3>
+      <p id="aboutBody">纯前端趣味 MBTI 风格测试。不登录，结果只存在你的浏览器本地。</p>
+      <button type="button" class="primary full" data-close-modal data-close-label>关闭</button>
+    </div>
+  </div>
+
+  <div class="modal" id="posterModal" hidden>
+    <div class="modal-bg" data-close-poster></div>
+    <div class="modal-card wide" role="dialog" aria-modal="true">
+      <h3>Posters</h3>
+      <div class="poster-grid">
+        <div>
+          <p>1:1</p>
+          <div id="posterSquare" class="poster-frame"></div>
+          <button type="button" class="secondary full" id="downloadSquareBtn">下载 1:1</button>
+        </div>
+        <div>
+          <p>9:16</p>
+          <div id="posterTall" class="poster-frame"></div>
+          <button type="button" class="secondary full" id="downloadTallBtn">下载 9:16</button>
+        </div>
+      </div>
+      <button type="button" class="primary full" data-close-poster data-close-label>关闭</button>
+    </div>
+  </div>
+
+  <script>window.PUBLIC_SHARE_URL=window.PUBLIC_SHARE_URL||"https://wrzyz.github.io/mbti-test/";</script>
+  <script src="./wechat_fix.js"></script><script src="./data.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
