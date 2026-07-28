@@ -1,0 +1,44 @@
+existing existing: 50000
+kept unique existing: 50000
+need generate: 0
+generated: 0
+total: 50000 axes: { EI: 14904, SN: 12992, TF: 11052, JP: 11052 } topics: {
+  love: 6960,
+  study: 4800,
+  work: 4480,
+  life: 3280,
+  funny: 2560,
+  anime: 2560,
+  game: 2480,
+  family: 3280,
+  digital: 2256,
+  travel: 2256,
+  food: 2256,
+  money: 2192,
+  dead: 1560,
+  fish: 1560,
+  drama: 1440,
+  eat: 1280,
+  sport: 1200,
+  pet: 1200,
+  night: 1200,
+  friend: 1200
+} uniqueOptionSets: 50000 badOptions: 0
+wrote bank.json 63.74 MB
+D:\chatgpt\mbti-test\_build_final_50k.js:369
+  const ctx = {}; vm.createContext(ctx);
+                  ^
+
+ReferenceError: vm is not defined
+    at updateDataJs (D:\chatgpt\mbti-test\_build_final_50k.js:369:19)
+    at main (D:\chatgpt\mbti-test\_build_final_50k.js:580:3)
+    at Object.<anonymous> (D:\chatgpt\mbti-test\_build_final_50k.js:584:1)
+    at Module._compile (node:internal/modules/cjs/loader:1871:14)
+    at Object..js (node:internal/modules/cjs/loader:2002:10)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47
+
+Node.js v24.18.0

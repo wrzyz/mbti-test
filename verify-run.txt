@@ -1,0 +1,4 @@
+LAB_SERVER http://127.0.0.1:8090/
+PHONE_LAN http://192.168.2.6:8090/
+api added 2
+OK desktop 题库 3602 题 · 本局 48 题 codex 50 ISTJ 已收录，题库已更新 · 3603

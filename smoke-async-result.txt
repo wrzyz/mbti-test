@@ -1,0 +1,5 @@
+goto_ms 10225
+start_text 开始快问快答
+disabled_before false
+FAIL page.waitForFunction: Timeout 120000ms exceeded.
+    at D:\chatgpt\mbti-test\_smoke_async.js:25:16

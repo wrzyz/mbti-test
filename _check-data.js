@@ -1,0 +1,12 @@
+const fs = require("fs");
+const vm = require("vm");
+const code = fs.readFileSync("D:/chatgpt/mbti-test/data.js", "utf8") + "\n;this.__Q=QUESTIONS; this.__T=TYPES; this.__C=CAREERS; this.__M=MATCHES; this.__U=UI_TEXT;";
+const ctx = {};
+vm.createContext(ctx);
+vm.runInContext(code, ctx);
+console.log("Q", ctx.__Q.length);
+console.log("bad", ctx.__Q.filter(q => !q.options || q.options.length !== 4).map(q => q.id));
+console.log("axes", ctx.__Q.reduce((a,q)=>{a[q.axis]=(a[q.axis]||0)+1;return a;},{}));
+console.log("types", Object.keys(ctx.__T).length);
+console.log("careers", Object.keys(ctx.__C).length);
+console.log("matches", Object.keys(ctx.__M).length);

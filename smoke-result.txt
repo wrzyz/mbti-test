@@ -1,0 +1,8 @@
+goto_ms 479
+start_text 题库加载中…
+disabled_before true
+bank_ms 369
+{"meta":"题库 50006 题 · 本局 48 题 · 随机混合","info":{"n":50000,"cats":21,"ready":true},"errors":[]}
+nickname_ok
+quiz_ok 4 宵夜冲动打乱明日饮食，并保持基本体面。空气突然变得很粘稠。面对「宵夜打乱」，你会
+SMOKE_OK

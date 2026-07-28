@@ -1,0 +1,12 @@
+static-check ok
+server http://127.0.0.1:8765
+desktop loaded
+desktop nickname
+desktop quiz
+desktop ok ESTJ width 1100
+mobile loaded
+mobile nickname
+mobile quiz
+mobile ok ESTJ width 374
+ALL_OK
+EXIT 0

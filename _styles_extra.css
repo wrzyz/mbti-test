@@ -1,0 +1,69 @@
+
+.inapp-banner {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0 0;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(16, 24, 40, 0.12);
+  background: linear-gradient(180deg, #fff7e8, #ffe8f1);
+}
+.inapp-banner p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.contribute-panel {
+  margin-top: 18px;
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, #ffffff, #f3fbff);
+}
+.contribute-form {
+  display: grid;
+  gap: 10px;
+}
+.contribute-form label {
+  display: grid;
+  gap: 6px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.contribute-form input,
+.contribute-form textarea,
+.contribute-form select {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 11px 12px;
+  font: inherit;
+  background: #fff;
+  color: var(--ink);
+}
+.contribute-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.type-tile.rich .mini {
+  display: inline-flex;
+  margin: 4px 0 2px;
+}
+@media (max-width: 640px) {
+  .inapp-banner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .contribute-options {
+    grid-template-columns: 1fr;
+  }
+  .contribute-panel {
+    padding: 14px;
+  }
+  .option-btn, .choice-btn {
+    min-height: 72px;
+  }
+}

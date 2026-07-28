@@ -1,0 +1,3 @@
+reuse existing server http://127.0.0.1:8090/
+server up
+OK desktop bankMeta= 题库 50006 题 · 本局 48 题 · 随机混合 type= ESFJ session= {"n":48,"topics":{"love":48},"first":"对方说我们随缘看看，最好让场面软着陆。你的人设补丁还没装完。面对「随缘看看」，你会？"} opts0= A. 按优先级处理「随缘看看」里最硬的约束（针对：对方说我们随缘看看·最好让场面

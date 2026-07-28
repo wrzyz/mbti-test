@@ -1,0 +1,10 @@
+node_modules/
+bank.json
+user-bank.json
+*.log
+*.bak
+*-pid.txt
+*-out.txt
+*-err.txt
+.DS_Store
+.vscode/

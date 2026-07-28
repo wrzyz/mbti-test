@@ -1,0 +1,14 @@
+{
+  "name": "mood-stage-quiz",
+  "version": "1.1.0",
+  "description": "Funny 48-question MBTI-style personality quiz",
+  "homepage": ".",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "test:flow": "node verify-simple.js"
+  },
+  "keywords": ["personality", "mbti", "quiz", "humor", "webapp"],
+  "author": "",
+  "license": "MIT"
+}
