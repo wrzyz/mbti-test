@@ -238,27 +238,36 @@ async function fetchBankJson(url) {
 
 async function loadFullBank() {
   const existing = rawBank();
-  // Always prefer async bank so 50k compact rows stay out of data.js.
-  if (existing.length >= 50000) {
+  // Embedded public bank is enough to start immediately.
+  if (existing.length >= 48) {
     setBankStatus(true, false);
-    return existing;
+    updateBankMeta();
+    renderCategories();
+  } else {
+    setBankStatus(false, true);
   }
-  setBankStatus(false, true);
-  const candidates = ["./bank.full.json", "./bank.json", "./bank.public.json", "./bank.mini.json"];
-  let lastErr = null;
+
+  // Optional remote expansion; never block the UI if network is bad.
+  const candidates = ["./bank.json", "./bank.public.json", "./bank.mini.json", "./bank.full.json"];
   for (const url of candidates) {
     try {
       const rows = await fetchBankJson(url);
+      if (!Array.isArray(rows) || rows.length <= existing.length) continue;
       if (typeof window !== "undefined") window.QUESTION_BANK = rows;
       setBankStatus(true, false);
       updateBankMeta();
       renderCategories();
       return rows;
     } catch (err) {
-      lastErr = err;
+      // keep trying / fall back
     }
   }
-  console.error("loadFullBank failed", lastErr);
+
+  if (existing.length) {
+    setBankStatus(true, false);
+    updateBankMeta();
+    return existing;
+  }
   setBankStatus(true, false);
   updateBankMeta();
   return rawBank();
