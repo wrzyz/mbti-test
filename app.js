@@ -22,6 +22,119 @@ let contributedQuestions = [];
 const CONTRIB_LOCAL_KEY = "mood-stage-user-bank-v1";
 const CONTRIB_QUEUE_KEY = "mood-stage-contrib-queue-v1";
 
+
+function extractHookText(text) {
+  const raw = t(text) || String(text || "");
+  const m = raw.match(/「([^」]{1,16})」/);
+  return m ? m[1] : raw.slice(0, 10) || "这题";
+}
+
+function cleanSpoken(s) {
+  return String(s || "")
+    .replace(/[（(]针对：.*?[）)]/g, "")
+    .replace(/[（(](?:笑一点|保人设|低消耗|可复盘|软着陆|轻一点|酷一点)[）)]/g, "")
+    .replace(/[·•]\d+$/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+const REACTION_LINES = {
+  E: [
+    "行，社牛模式启动：先把场子热起来再说。",
+    "开麦是勇气，别把自己讲成喇叭。",
+    "你选了冲锋，记得给自己留撤退动画。",
+    "很好，尴尬正在被你做成开场白。"
+  ],
+  I: [
+    "懂，先观察是高手操作，不瞎输出也是输出。",
+    "低调续命成功，社交电量+1。",
+    "你没有冷漠，你只是在省流量。",
+    "沉默不是输，乱开麦才容易翻车。"
+  ],
+  S: [
+    "务实！细节党上线，幻觉先靠边。",
+    "清单一出，焦虑退散一半。",
+    "先把事实钉住，故事以后再写。",
+    "落地派认证：能勾选的才叫计划。"
+  ],
+  N: [
+    "脑洞已加载，记得给现实留个接口。",
+    "三种结局是浪漫，选一条执行是成熟。",
+    "灵感可以飞，行动得有降落伞。",
+    "你看见了更大的地图，别在支线迷路。"
+  ],
+  T: [
+    "理智在线：先把规则讲清楚，情绪稍后排号。",
+    "利弊表一出，气氛也得讲理。",
+    "对事不对人，这波很成年人。",
+    "结论清晰的人，最不容易被带节奏。"
+  ],
+  F: [
+    "心软不是弱点，是你还把人当人。",
+    "先接住情绪，方案才听得进去。",
+    "温度还在，事情才有得谈。",
+    "你选了共情，世界会因此软一点。"
+  ],
+  J: [
+    "计划党出手，DDL开始发抖。",
+    "有截止点的人生，更不容易漂走。",
+    "先锁主线，快乐会更稳。",
+    "条理是自由的一种高级皮肤。"
+  ],
+  P: [
+    "弹性生存！现场版往往比PPT更真实。",
+    "边走边调，也是一种天赋。",
+    "半成品先发，完美主义先歇会儿。",
+    "你给生活留了呼吸感，很好。"
+  ]
+};
+
+const ROAST_LINES = [
+  "这选择很你：又想体面，又想活。",
+  "系统提示：精神状态已更新，请继续作答。",
+  "哈，这波操作可复盘，可发朋友圈花絮。",
+  "记录在案：你不是没想法，你是很会保护自己。",
+  "短评：策略在线，人味也在。",
+  "如果这是一集番，你现在是高光或名场面预备役。"
+];
+
+function buildChoiceReaction(q, value) {
+  const axis = (q && q.axis) || "";
+  const hook = extractHookText(q && q.text);
+  const pool = REACTION_LINES[value] || ROAST_LINES;
+  const base = pool[(state.index + String(value).charCodeAt(0)) % pool.length];
+  const extra = ROAST_LINES[(state.index * 3 + hook.length) % ROAST_LINES.length];
+  const quote = t(q && q.quote) || "";
+  const pureQuote = String(quote).replace(/^金句[:：]\s*/, "").replace(/^Quote[:：]\s*/i, "");
+  // Mix reaction + one-line quote/roast for each answer.
+  if (state.index % 2 === 0) {
+    return { badge: "即时吐槽", line: base + "（关于「" + hook + "」）", quote: pureQuote || extra };
+  }
+  return { badge: "本手金句", line: pureQuote || extra, quote: base };
+}
+
+function showChoiceReaction(payload) {
+  if (!els.choiceReaction) return;
+  if (els.reactionBadge) els.reactionBadge.textContent = payload.badge || ui("reactionBadge");
+  if (els.reactionLine) els.reactionLine.textContent = payload.line || "";
+  if (els.reactionQuote) els.reactionQuote.textContent = payload.quote || "";
+  els.choiceReaction.hidden = false;
+  els.choiceReaction.classList.remove("show");
+  void els.choiceReaction.offsetWidth;
+  els.choiceReaction.classList.add("show");
+}
+
+function hideChoiceReaction() {
+  if (!els.choiceReaction) return;
+  els.choiceReaction.classList.remove("show");
+  els.choiceReaction.hidden = true;
+}
+
+function extractHook(text) {
+  const m = String(text || "").match(/「([^」]{1,16})」/);
+  return m ? m[1] : String(text || "").slice(0, 10) || "这场面";
+}
+
 function expandOne(row, fallbackId) {
   if (!row) return null;
   if (!Array.isArray(row)) return row;
@@ -149,8 +262,27 @@ function expandOne(row, fallbackId) {
         let labelZh = o[1];
         let hintZh = o[3] || o[0];
         // If the label is a tech phrase, replace with conversational version.
-        labelZh = emotionMap[labelZh] || labelZh;
-        hintZh = emotionMap[hintZh] || hintZh;
+        labelZh = cleanSpoken(labelZh);
+        // Only rewrite pure tech tags; keep already-human labels/hints.
+        if (emotionMap[labelZh]) labelZh = cleanSpoken(emotionMap[labelZh]);
+        hintZh = cleanSpoken(hintZh);
+        if (emotionMap[hintZh] && hintZh.length <= 4) hintZh = cleanSpoken(emotionMap[hintZh]);
+        if (hintZh.length > 14) hintZh = hintZh.slice(0, 12);
+        // Make leftover technical labels more spoken.
+        if (labelZh.length < 8 || /清单|边界|标准|路径|主线|补丁/.test(labelZh) && !/「/.test(labelZh)) {
+          const hook = extractHook(row[3]);
+          const spokenFallback = {
+            E: "直接开麦把「" + hook + "」聊开",
+            I: "先观察，不在「" + hook + "」里空耗电",
+            S: "把「" + hook + "」拆成能勾选的小步",
+            N: "先脑补走向，再选「" + hook + "」活路",
+            T: "先讲清楚「" + hook + "」的规则和利弊",
+            F: "先接住情绪，再处理「" + hook + "」",
+            J: "给「" + hook + "」定截止，做完再浪",
+            P: "先推进一版，现场再修「" + hook + "」"
+          };
+          if (spokenFallback[o[0]]) labelZh = spokenFallback[o[0]];
+        }
         // Clean generation artifacts left in compact bank rows.
         labelZh = String(labelZh || "")
           .replace(/[（(]针对：.*?[）)]/g, "")
@@ -442,6 +574,10 @@ function initElements() {
     questionKicker: document.getElementById("questionKicker"),
     questionText: document.getElementById("questionText"),
     questionQuote: document.getElementById("questionQuote"),
+    choiceReaction: document.getElementById("choiceReaction"),
+    reactionBadge: document.getElementById("reactionBadge"),
+    reactionLine: document.getElementById("reactionLine"),
+    reactionQuote: document.getElementById("reactionQuote"),
     options: document.getElementById("options"),
     prevBtn: document.getElementById("prevBtn"),
     homeFromQuizBtn: document.getElementById("homeFromQuizBtn"),
@@ -865,6 +1001,7 @@ function calcResult(answers) {
 }
 
 function renderQuestion() {
+  hideChoiceReaction();
   const list = activeQuestions();
   const q = list[state.index];
   if (!q) return;
@@ -930,7 +1067,16 @@ function onChoice(value) {
   state.choiceLocked = true;
   state.answers[state.index] = value;
   playSound("select");
-  renderQuestion();
+  const q = activeQuestions()[state.index];
+  if (els.options) {
+    Array.from(els.options.querySelectorAll(".option-btn")).forEach((btn) => {
+      btn.classList.toggle("selected", btn.getAttribute("data-value") === value);
+    });
+  }
+  const reaction = buildChoiceReaction(q, value);
+  showChoiceReaction(reaction);
+  if (els.questionQuote && reaction.quote) els.questionQuote.textContent = reaction.quote;
+  if (els.quoteLabel) els.quoteLabel.textContent = reaction.badge || ui("quoteLabel");
   window.setTimeout(() => {
     if (state.index < activeQuestions().length - 1) {
       state.index += 1;
@@ -941,7 +1087,7 @@ function onChoice(value) {
       renderResult(result, true);
     }
     state.choiceLocked = false;
-  }, 120);
+  }, 900);
 }
 
 function renderResult(res, playComplete) {
