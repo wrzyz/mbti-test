@@ -263,11 +263,11 @@ function expandOne(row, fallbackId) {
         let hintZh = o[3] || o[0];
         // If the label is a tech phrase, replace with conversational version.
         labelZh = cleanSpoken(labelZh);
-        // Only rewrite pure tech tags; keep already-human labels/hints.
-        if (emotionMap[labelZh]) labelZh = cleanSpoken(emotionMap[labelZh]);
-        hintZh = cleanSpoken(hintZh);
-        if (emotionMap[hintZh] && hintZh.length <= 4) hintZh = cleanSpoken(emotionMap[hintZh]);
-        if (hintZh.length > 14) hintZh = hintZh.slice(0, 12);
+        // Labels already polished in bank; only map ultra-short legacy tags.
+        if (labelZh.length <= 4 && emotionMap[labelZh]) labelZh = cleanSpoken(emotionMap[labelZh]);
+        // Keep hints as short badges, never expand into long sentences.
+        hintZh = cleanSpoken(hintZh || o[0]);
+        if (hintZh.length > 8) hintZh = hintZh.slice(0, 8);
         // Make leftover technical labels more spoken.
         if (labelZh.length < 8 || /清单|边界|标准|路径|主线|补丁/.test(labelZh) && !/「/.test(labelZh)) {
           const hook = extractHook(row[3]);
