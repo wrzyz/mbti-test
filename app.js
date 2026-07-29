@@ -892,7 +892,21 @@ function calcResult(answers) {
   return { code, dims, name: state.name || (state.language === "zh" ? "匿名选手" : "Anonymous Player") };
 }
 
-function renderQuestion() {
+function renderQuestion(animated) {
+  var qc = els.quizCard;
+  if (animated && qc) {
+    qc.classList.add("q-exit");
+    var tmr = setTimeout(function() {
+      qc.classList.remove("q-exit");
+      qc.classList.add("q-enter");
+      _rq();
+      setTimeout(function() { qc.classList.remove("q-enter"); }, 350);
+    }, 280);
+  } else {
+    _rq();
+  }
+  function _rq() {
+
   hideChoiceReaction();
   const list = activeQuestions();
   const q = list[state.index];
@@ -972,16 +986,17 @@ function onChoice(value) {
   window.setTimeout(() => {
     if (state.index < activeQuestions().length - 1) {
       state.index += 1;
-      renderQuestion();
+      renderQuestion(true);
       playSound("flip");
     } else {
       const result = calcResult(state.answers);
       renderResult(result, true);
     }
     state.choiceLocked = false;
-  }, 900);
+  }, 2000);
 }
 
+  }
 function renderResult(res, playComplete) {
   const info = TYPES[res.code];
   if (!info) return;
