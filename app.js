@@ -1,5 +1,5 @@
 const STORAGE_KEY = "mood-stage-quiz-result-v6";
-const RUN_SIZE = 60;
+const RUN_SIZE = 48;
 const AXES = ["EI", "SN", "TF", "JP"];
 const state = {
 language: "zh",
@@ -848,73 +848,19 @@ void els.quizCard.offsetWidth;
 els.quizCard.classList.add("flip-anim");
 }
 }
-
-// REACTION_LINES: per-axis roasts shown after each answer
-var REACTION_LINES = {
-  E: ['社牛启动：先开口就不容易冷场','你选了开口——场面开始流动了','主动型人格尴尬追不上你','外向不是病是超能力'],
-  I: ['I人保命技：少说话多活着','你选了沉默——电量+10%','内向是战略性省电','先观察再出手是I人智慧'],
-  S: ['务实派：先看到路再迈腿','细节党上线','落地党：再好看不如一个实操','先问清楚少走弯路'],
-  N: ['脑洞星人：先想一百种可能','格局打开——掀开天花板','想象力是你的人生加速器','先抓方向的人先吃到螃蟹'],
-  T: ['理中客：先讲逻辑再谈感情','对事不对人——成年人修养','冷静是你的超能力','逻辑清晰吵架自带占优'],
-  F: ['心软之神：先把人哄好再说事','你选了共情世界温度+1度','先照顾感受——人际大师','F人：我没事…其实有事'],
-  J: ['J人狂喜：终于有人列计划了','计划通——让混乱有了秩序','deadline是第一生产力','先排优先级人生不会太乱'],
-  P: ['随性玩家：计划是什么能吃吗','弹性生存：走一步看三步','先动再说完美是长出来的','计划赶不上变化你就是变化']
-};
-var ROAST_LINES = [
-  '系统鉴定：你是那种会让自己过得还行的人',
-  '这选项一出你的人格画像又清晰了一点',
-  '记录在案：精神状态基本稳定略带波动',
-  '本AI表示：这个选择很你',
-  '好的存档了——继续下一题',
-  '你选这个我不意外（真的不意外）',
-  '性格标签更新中……请稍候',
-  '这个问题你犹豫了？有意思',
-  '短评：活得挺真实虽然偶尔也想逃',
-  '人格拼图又+1块',
-  '你对生活的态度：尽力但不勉强',
-  '这题没有标准答案但你的答案很精彩',
-  '继续继续后面还有更搞的'
-];
-
-function buildChoiceReaction(q, value) {
-  var pool = REACTION_LINES[value] || ROAST_LINES;
-  var base = pool[(state.index + (value||'').charCodeAt(0)) % pool.length];
-  var extra = ROAST_LINES[(state.index * 3 + String(q&&q.text).length) % ROAST_LINES.length];
-  var pureQuote = String(q&&q.quote||'').replace(/^金句[:：]\s*/,'').replace(/^Quote[:：]\s*/i,'');
-  if (state.index % 2 === 0) {
-    return { badge: '即时吐槽', line: base, quote: pureQuote || extra };
-  }
-  return { badge: '本手金句', line: pureQuote || extra, quote: base };
-}
 function onChoice(value) {
 if (state.choiceLocked) return;
 state.choiceLocked = true;
 state.answers[state.index] = value;
 playSound("select");
-var q = activeQuestions()[state.index];
-var reaction = buildChoiceReaction(q, value);
-if (els.choiceReaction) {
-  if (els.reactionBadge) els.reactionBadge.textContent = reaction.badge;
-  if (els.reactionLine) els.reactionLine.textContent = reaction.line;
-  if (els.reactionQuote) els.reactionQuote.textContent = reaction.quote;
-  els.choiceReaction.hidden = false;
-  els.choiceReaction.classList.remove('show');
-  void els.choiceReaction.offsetWidth;
-  els.choiceReaction.classList.add('show');
-}
-if (els.questionQuote && reaction.quote) els.questionQuote.textContent = reaction.quote;
-if (els.quoteLabel) els.quoteLabel.textContent = reaction.badge;
-window.setTimeout(function() {
-if (els.choiceReaction) {
-  els.choiceReaction.classList.remove('show');
-  els.choiceReaction.hidden = true;
-}
+renderQuestion();
+window.setTimeout(() => {
 if (state.index < activeQuestions().length - 1) {
 state.index += 1;
 renderQuestion();
-playSound('flip');
+playSound("flip");
 } else {
-var result = calcResult(state.answers);
+const result = calcResult(state.answers);
 renderResult(result, true);
 }
 state.choiceLocked = false;
